@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Localização</title>
+  </head>
+  <body>
+    <h1>Localização</h1>
+    <div id="coordenadas"></div>
+
+      <div id="contador">
+        10
+      </div>
+
+    <script>
+
+      const geoLocation = navigator.geolocation;
+      const coordenadas = document.getElementById('coordenadas');
+      const contador = document.getElementById('contador');
+
+      function atualizarCoordenadas(position) {
+        let lat = position.coords.latitude;
+        let long = position.coords.longitude;
+
+        coordenadas.classList.remove('animate'); // remove a classe de animação
+        coordenadas.innerHTML = `Latitude: ${lat}<br>Longitude: ${long}`; // atualiza as coordenadas
+        coordenadas.classList.add('animate'); // adiciona a classe de animação
+      }
+
+      function errorHandler(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      }
+
+      function atualizarContador() {
+        let tempoRestante = parseInt(contador.innerText);
+        if (tempoRestante === 0) {
+          geoLocation.getCurrentPosition(atualizarCoordenadas, errorHandler); // atualiza as coordenadas
+          contador.innerText = 10; // reinicia o contador
+        } else {
+          contador.innerText = tempoRestante - 1; // atualiza o contador
+        }
+      }
+
+      setInterval(atualizarContador, 1000); // executa a função a cada 1 segundo (1000ms)
+
+    </script>
+  </body>
+</html>
